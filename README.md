@@ -35,6 +35,8 @@ $(document).ready(function () {
     <div class="some_datepicker">
     </div>
 </div>
+<div class="selected" style="margin: auto;margin-top: 15px;">
+</div>
 ```
 
 ###I18N
