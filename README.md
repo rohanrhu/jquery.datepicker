@@ -80,5 +80,5 @@ Datepicker_1.month_names = {
 };
 ```
 
-##Lıcense
+##License
 MIT
