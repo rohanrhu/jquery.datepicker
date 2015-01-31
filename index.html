@@ -1,109 +1,109 @@
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>jquery.datepicker</title>
-	<link rel="stylesheet" type="text/css" href="css/jquery.datepicker.css" />
-	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-	<script type="text/javascript" src="js/jquery.datepicker.js"></script>
-	<script type="text/javascript">
-		// Localization
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>jquery.datepicker</title>
+    <link rel="stylesheet" type="text/css" href="css/jquery.datepicker.css" />
+    <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.datepicker.js"></script>
+    <script type="text/javascript">
+        // Localization
 
-		Datepicker_1.day_names_short = {
-		    1: 'Mon',
-		    2: 'Tue',
-		    3: 'Wed',
-		    4: 'Thu',
-		    5: 'Fri',
-		    6: 'Sat',
-		    7: 'Sun'
-		};
+        Datepicker_1.day_names_short = {
+            1: 'Mon',
+            2: 'Tue',
+            3: 'Wed',
+            4: 'Thu',
+            5: 'Fri',
+            6: 'Sat',
+            7: 'Sun'
+        };
 
-		Datepicker_1.day_names = {
-		    1: 'Monday',
-		    2: 'Tuesday',
-		    3: 'Wednesday',
-		    4: 'Thursday',
-		    5: 'Friday',
-		    6: 'Saturday',
-		    7: 'Sunday'
-		};
+        Datepicker_1.day_names = {
+            1: 'Monday',
+            2: 'Tuesday',
+            3: 'Wednesday',
+            4: 'Thursday',
+            5: 'Friday',
+            6: 'Saturday',
+            7: 'Sunday'
+        };
 
-		Datepicker_1.month_names = {
-		    1: 'January',
-		    2: 'February',
-		    3: 'March',
-		    4: 'Apri',
-		    5: 'May',
-		    6: 'June',
-		    7: 'July',
-		    8: 'Agust',
-		    9: 'September',
-		    10: 'October',
-		    11: 'November',
-		    12: 'December'
-		};
+        Datepicker_1.month_names = {
+            1: 'January',
+            2: 'February',
+            3: 'March',
+            4: 'Apri',
+            5: 'May',
+            6: 'June',
+            7: 'July',
+            8: 'Agust',
+            9: 'September',
+            10: 'October',
+            11: 'November',
+            12: 'December'
+        };
 
-		$(document).ready(function () {
-			var $selected = $('.selected');
+        $(document).ready(function () {
+            var $selected = $('.selected');
 
-			$some_datepicker = $('.some_datepicker');
-			
-			$some_datepicker.datepicker({
-				next_button: '&gt;',
-				prev_button: '&lt;'
-			});
+            $some_datepicker = $('.some_datepicker');
+            
+            $some_datepicker.datepicker({
+                next_button: '&gt;',
+                prev_button: '&lt;'
+            });
 
-			$some_datepicker.setStartDate({
-				year: 2015,
-				// jquery.datepicker accepts first month as 1
-				// (built-in Date() class accepts first month as 0)
-				month: 1,
-				day: 3
-			});
+            $some_datepicker.setStartDate({
+                year: 2015,
+                // jquery.datepicker accepts first month as 1
+                // (built-in Date() class accepts first month as 0)
+                month: 1,
+                day: 3
+            });
 
-			$some_datepicker.on('date_selected.datepicker', function (event, date) {
-				$selected.show().html('Selected date is: '+date.date.toString());
-			});
-		});
-	</script>
-	<style type="text/css">
-		.a,
-		.a:visited {
-			color: #176bb8;
-			text-decoration: none;
-		}
+            $some_datepicker.on('date_selected.datepicker', function (event, date) {
+                $selected.show().html('Selected date is: '+date.date.toString());
+            });
+        });
+    </script>
+    <style type="text/css">
+        .a,
+        .a:visited {
+            color: #176bb8;
+            text-decoration: none;
+        }
 
-		.a:hover {
-			text-decoration: underline;
-		}
-	</style>
+        .a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-	<div style="text-align: center; font-family: 'Arial';">
-		<div style="font-size: 25px; margin-bottom: 5px; margin-top: 10px;">
-			jquery.datepicker
-		</div>
-		<div style="font-size: 12px; margin-bottom: 5px;">
-			a futuristic datepicker for web
-		</div>
-		<div style="font-size: 12px; margin-bottom: 15px;">
-			<a href="https://github.com/rohanrhu/jquery.datepicker" class="a" target="_blank">
-				https://github.com/rohanrhu/jquery.datepicker
-			</a>
-		</div>
-		<div style="width: 300px; font-family: 'Arial'; margin: auto;">
-			<div class="some_datepicker">
-			</div>
-		</div>
+    <div style="text-align: center; font-family: 'Arial';">
+        <div style="font-size: 25px; margin-bottom: 5px; margin-top: 10px;">
+            jquery.datepicker
+        </div>
+        <div style="font-size: 12px; margin-bottom: 5px;">
+            a futuristic datepicker for web
+        </div>
+        <div style="font-size: 12px; margin-bottom: 15px;">
+            <a href="https://github.com/rohanrhu/jquery.datepicker" class="a" target="_blank">
+                https://github.com/rohanrhu/jquery.datepicker
+            </a>
+        </div>
+        <div style="width: 300px; font-family: 'Arial'; margin: auto;">
+            <div class="some_datepicker">
+            </div>
+        </div>
 
-		<div class="selected" style="margin: auto;margin-top: 15px;">
-		</div>
-		<div style="font-size: 12px; margin: auto;margin-top: 15px;">
-			Copyright &copy;
-			<a href="http://oguzhaneroglu.com" class="a" target="_blank">Oğuzhan Eroğlu</a>,
-			licensed under <a href="http://opensource.org/licenses/MIT" class="a">MIT</a>.
-		</div>
-	</div>
-	<a href="https://github.com/rohanrhu/jquery.datepicker"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+        <div class="selected" style="margin: auto;margin-top: 15px;">
+        </div>
+        <div style="font-size: 12px; margin: auto;margin-top: 15px;">
+            Copyright &copy;
+            <a href="http://oguzhaneroglu.com" class="a" target="_blank">Oğuzhan Eroğlu</a>,
+            licensed under <a href="http://opensource.org/licenses/MIT" class="a">MIT</a>.
+        </div>
+    </div>
+    <a href="https://github.com/rohanrhu/jquery.datepicker"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </body>
 </html>
