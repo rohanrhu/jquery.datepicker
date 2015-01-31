@@ -1,6 +1,8 @@
 # jquery.datepicker
 a futuristic datepicker for web
 
+<img src="http://oguzhaneroglu.com/static/images/jquery.datepicker.png" />
+
 ###Init
 
 ```javascript
@@ -66,7 +68,7 @@ Datepicker_1.month_names = {
     1: 'January',
     2: 'February',
     3: 'March',
-    4: 'Apri',
+    4: 'April',
     5: 'May',
     6: 'June',
     7: 'July',
