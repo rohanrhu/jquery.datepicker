@@ -6,14 +6,14 @@
 
 // ----------------------------------------
 
-var Datepicker_1 = function (parameters) {
-    var t_Datepicker_1 = this;
+var jQueryDatepicker = function (parameters) {
+    var t_jQueryDatepicker = this;
 
-    t_Datepicker_1.$element = parameters.$element;
-    t_Datepicker_1.parameters = parameters;
+    t_jQueryDatepicker.$element = parameters.$element;
+    t_jQueryDatepicker.parameters = parameters;
 
-    t_Datepicker_1.initialize = function () {
-        t_Datepicker_1.$element.each(function () {
+    t_jQueryDatepicker.initialize = function () {
+        t_jQueryDatepicker.$element.each(function () {
             var $datepicker = $(this);
 
             var date_now;
@@ -110,7 +110,7 @@ var Datepicker_1 = function (parameters) {
                         var $_day_proto = $_month_weekday_days.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.datepicker_1__proto');
                         var $_day;
 
-                        var _day_name = Datepicker_1.day_names_short[_weekday];
+                        var _day_name = jQueryDatepicker.day_names_short[_weekday];
                         
                         $_month_weekday_title.html(_day_name);
 
@@ -162,7 +162,7 @@ var Datepicker_1 = function (parameters) {
                 calendar_current_month = params.month;
 
                 $current_month = $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+params.month);
-                $label_month.html(Datepicker_1.month_names[calendar_current_month]);
+                $label_month.html(jQueryDatepicker.month_names[calendar_current_month]);
                 $datepicker.find('.datepicker_1_calendar_1_months_month').not('.datepicker_1__proto').not($current_month).hide().removeClass('__current');
                 $current_month.show().addClass('__current');
 
@@ -340,7 +340,7 @@ var Datepicker_1 = function (parameters) {
     };
 };
 
-Datepicker_1.day_names_short = {
+jQueryDatepicker.day_names_short = {
     1: 'Mon',
     2: 'Tue',
     3: 'Wed',
@@ -350,7 +350,7 @@ Datepicker_1.day_names_short = {
     7: 'Sun'
 };
 
-Datepicker_1.day_names = {
+jQueryDatepicker.day_names = {
     1: 'Monday',
     2: 'Tuesday',
     3: 'Wednesday',
@@ -360,7 +360,7 @@ Datepicker_1.day_names = {
     7: 'Sunday'
 };
 
-Datepicker_1.month_names = {
+jQueryDatepicker.month_names = {
     1: 'January',
     2: 'February',
     3: 'March',
@@ -464,7 +464,7 @@ Datepicker_1.month_names = {
                 $element.find('.datepicker_1_content_1_sidebutton__left .datepicker_1_content_1_sidebutton_content')
                 .html(t_init.parameters.prev_button);
 
-                var datepicker = new Datepicker_1({
+                var datepicker = new jQueryDatepicker({
                     $element: $element
                 });
 
