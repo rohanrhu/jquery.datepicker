@@ -1,0 +1,144 @@
+/* ------------------------------------------------- */
+
+.datepicker_1_table {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.datepicker_1_table_td {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* ------------------------------------------------- */
+
+.datepicker_1 {
+    width: 100%;
+    position: relative;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+.datepicker_1_content_1 {
+    height: 50px;
+    background: #DFDFDF;
+    text-align: center;
+    position: relative;
+    font-size: 16px;
+}
+
+.datepicker_1_content_1_sidebutton {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    padding: 0px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 200ms;
+    color: rgb(86, 86, 86);
+    line-height: 18px;
+}
+
+.datepicker_1_content_1_sidebutton:hover {
+    opacity: 0.6;
+}
+
+.datepicker_1_content_1_sidebutton__left {
+    left: 0px;
+}
+
+.datepicker_1_content_1_sidebutton__right {
+    right: 0px;
+}
+
+.datepicker_1_content_2 {
+
+}
+
+.datepicker_1_calendar_1 {
+
+}
+
+.datepicker_1_calendar_1_months {
+
+}
+
+.datepicker_1_calendar_1_months_month {
+    display: none;
+}
+
+.datepicker_1_calendar_1_months_month.__current {
+    display: block;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays {
+    font-size: 0px;
+    background: #f1f1f1;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday {
+    font-size: 13px;
+    display: inline-block;
+    *display: inline;
+    vertical-align: top;
+    width: 14.28%;
+    min-height: 100px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_title {
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days {
+
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day {
+    height: 35px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.__previous_month {
+    cursor: initial;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.__current {
+    background: rgb(51, 174, 42);
+    color: white;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day:not(.__selected):not(.__current):not(.__current_other):not(.__current_other_diff):not(.__previous_month):hover {
+    background: #D6D6D6;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.__current_other_diff:hover {
+    background: #6B6B6B;
+    color: white;
+}
+
+/* --------------- */
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.__current_other {
+    background: #9F9F9F;
+    color: white;
+}
+
+.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.__current_other_diff {
+    background: #B9B9B9;
+    color: white;
+}
+
+/* ------------------------------------------------- */
+
+.datepicker_1__proto {
+    display: none;
+}
+
+/* ------------------------------------------------- */
