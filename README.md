@@ -44,7 +44,7 @@ $(document).ready(function () {
 ###I18N
 
 ```javascript
-Datepicker_1.day_names_short = {
+jQueryDatepicker.day_names_short = {
     1: 'Mon',
     2: 'Tue',
     3: 'Wed',
@@ -54,7 +54,7 @@ Datepicker_1.day_names_short = {
     7: 'Sun'
 };
 
-Datepicker_1.day_names = {
+jQueryDatepicker.day_names = {
     1: 'Monday',
     2: 'Tuesday',
     3: 'Wednesday',
@@ -64,7 +64,7 @@ Datepicker_1.day_names = {
     7: 'Sunday'
 };
 
-Datepicker_1.month_names = {
+jQueryDatepicker.month_names = {
     1: 'January',
     2: 'February',
     3: 'March',
