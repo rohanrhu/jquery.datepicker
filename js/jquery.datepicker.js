@@ -323,7 +323,7 @@ var jQueryDatepicker = function (parameters) {
 
             $datepicker.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day').on('click.datepicker', function (event) {
                 var $day = $(this);
-                if ($day.hasClass('__current_other')) {
+                if ($day.hasClass('__current_other') || $day.hasClass('__previous_month')) {
                     return;
                 }
 
