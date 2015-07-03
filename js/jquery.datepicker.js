@@ -368,7 +368,7 @@ jQueryDatepicker.month_names = {
     5: 'May',
     6: 'June',
     7: 'July',
-    8: 'Agust',
+    8: 'August',
     9: 'September',
     10: 'October',
     11: 'November',
