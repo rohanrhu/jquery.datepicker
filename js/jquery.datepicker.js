@@ -1,10 +1,15 @@
 /*
+ * jquery.datepicker, a futuristic datepicker for web
+ *
  * https://github.com/rohanrhu/jquery.datepicker
+ * http://oguzhaneroglu.com/projects/jquery.datepicker/
+ *
  * Copyright (C) 2014, Oğuzhan Eroğlu <rohanrhu2@gmail.com>
  * Licensed under MIT
+ * 
+ * version: 1.2.0
+ * build: 2017.01.16.03.23.00
  */
-
-// ----------------------------------------
 
 var jQueryDatepicker = function (parameters) {
     var t_jQueryDatepicker = this;
@@ -16,6 +21,9 @@ var jQueryDatepicker = function (parameters) {
         t_jQueryDatepicker.$element.each(function () {
             var $datepicker = $(this);
 
+            var data = {};
+            $datepicker.data('jQueryDatepicker', data);
+
             var date_now;
             var date_selected;
 
@@ -24,15 +32,15 @@ var jQueryDatepicker = function (parameters) {
             var current_month = current_date.getMonth()+1;
             var current_day = current_date.getDate();
 
-            var calendar_current_year;
-            var calendar_current_month;
-            var calendar_current_day;
-            var calendar_current_weekday;
+            var calendar_year;
+            var calendar_month;
+            var calendar_day;
+            var calendar_weekday;
 
-            var calendar_current_year_other;
-            var calendar_current_month_other;
-            var calendar_current_day_other;
-            var calendar_current_weekday_other;
+            var selected_start_year;
+            var selected_start_month;
+            var selected_start_day;
+            var selected_start_weekday;
 
             var selected_date;
             var selected_year;
@@ -40,43 +48,67 @@ var jQueryDatepicker = function (parameters) {
             var selected_day;
             var selected_dayofweek;
 
-            var $label_year = $datepicker.find('.datepicker_1_label_year');
-            var $label_month = $datepicker.find('.datepicker_1_label_month');
+            var is_date_selected = false;
+            var is_start_date_selected = false;
 
-            var $calendar = $datepicker.find('.datepicker_1_calendar_1');
-            var $months = $datepicker.find('.datepicker_1_calendar_1_months');
-            var $month_proto = $datepicker.find('.datepicker_1_calendar_1_months_month.datepicker_1__proto');
-            var $weekday_proto = $datepicker.find('.datepicker_1_calendar_1_months_month_weekdays_weekday.datepicker_1__proto');
+            data.date = false;
+            data.start_date = false;
+
+            data.mode = jQueryDatepicker.MODE_DATE;
+            data.is_disabled = false;
+
+            var $label_year = $datepicker.find('.jQueryDatepicker_label_year');
+            var $label_month = $datepicker.find('.jQueryDatepicker_label_month');
+
+            var $calendar = $datepicker.find('.jQueryDatepicker_calendar');
+            var $months = $datepicker.find('.jQueryDatepicker_calendar_months');
+            var $month_proto = $datepicker.find('.jQueryDatepicker_calendar_months_month.jQueryDatepicker__proto');
+            var $weekday_proto = $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday.jQueryDatepicker__proto');
 
             var $current_month;
             var $current_day;
+            var $current_start_day;
 
-            $datepicker.on('initialize.datepicker', function (event) {
-                calendar_current_year = current_year;
-                calendar_current_month = current_month;
-                calendar_current_day = 0;
+            var $rotationButton__left = $datepicker.find('.jQueryDatepicker_rotationButton__left');
+            var $rotationButton__right = $datepicker.find('.jQueryDatepicker_rotationButton__right');
+            var $rotationButton__left_iconImg = $rotationButton__left.find('.jQueryDatepicker_rotationButton_iconImg');
+            var $rotationButton__right_iconImg = $rotationButton__right.find('.jQueryDatepicker_rotationButton_iconImg');
 
-                $datepicker.trigger('select_year.datepicker', {year: calendar_current_year});
-                $datepicker.trigger('select_month.datepicker', {month: calendar_current_month});
-            });
+            var $disabledLayer = $datepicker.find('.jQueryDatepicker_disabledLayer');
 
-            $datepicker.on('select_year.datepicker', function (event, params) {
+            var color = $datepicker.find('.jQueryDatepicker_header_sidebutton').css('color');
+            var left_svg = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path transform="rotate(-180 12,11.996270179748535)" d="m4.5873,21.16343l9.16716,-9.16716l-9.16716,-9.16716l2.82912,-2.82912l11.99628,11.99628l-11.99628,11.99628l-2.82912,-2.82912z" fill="'+color+'"/></svg>';
+            var right_svg = '<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path fill="'+color+'" d="m4.5873,21.16343l9.16716,-9.16716l-9.16716,-9.16716l2.82912,-2.82912l11.99628,11.99628l-11.99628,11.99628l-2.82912,-2.82912z"/></svg>';
+
+            $rotationButton__left_iconImg.attr('src', 'data:image/svg+xml;base64,'+window.btoa(left_svg))
+            $rotationButton__right_iconImg.attr('src', 'data:image/svg+xml;base64,'+window.btoa(right_svg))
+
+            data.initialize = function () {
+                calendar_year = current_year;
+                calendar_month = current_month;
+                calendar_day = 0;
+
+                $datepicker.trigger('jQueryDatepicker_select_year', {year: calendar_year});
+                $datepicker.trigger('jQueryDatepicker_select_month', {month: calendar_month});
+            };
+
+            $datepicker.on('jQueryDatepicker_select_year.jQueryDatepicker', function (event, params) {
                 params.year = parseInt(params.year);
 
-                calendar_current_year = params.year;
+                calendar_year = params.year;
 
-                $datepicker.find('.datepicker_1_calendar_1_months_month').not('.datepicker_1__proto').remove();
+                $datepicker.find('.jQueryDatepicker_calendar_months_month').not('.jQueryDatepicker__proto').remove();
 
                 var $_month;
                 for (var _month=1; _month <= 12; _month++) {
                     $_month = $month_proto.clone(true);
-                    $_month.removeClass('datepicker_1__proto');
-                    var $_month_weekdays = $_month.find('.datepicker_1_calendar_1_months_month_weekdays');
+                    $_month.removeClass('jQueryDatepicker__proto');
+                    var $_month_weekdays = $_month.find('.jQueryDatepicker_calendar_months_month_weekdays');
                     var $_month_weekday;
 
-                    var _month_date = new Date(calendar_current_year, _month);
+                    var _month_date = new Date(calendar_year, _month);
 
-                    var _day_count = new Date(calendar_current_year, _month, 0).getDate();
+                    var _day_count = new Date(calendar_year, _month, 0).getDate();
 
                     var _weekday_days = {};
                     for (var _weekday=1; _weekday <= 7; _weekday++) {
@@ -89,7 +121,7 @@ var jQueryDatepicker = function (parameters) {
                     var indicator = 0;
 
                     for (var _day=1; _day <= _day_count; _day++) {
-                        var _day_date = new Date(calendar_current_year, _month-1, _day-1);
+                        var _day_date = new Date(calendar_year, _month-1, _day-1);
                         var _day_weekday = _day_date.getDay()+1;
                         var _weekdays = _weekday_days[_day_weekday];
 
@@ -104,10 +136,10 @@ var jQueryDatepicker = function (parameters) {
 
                     for (_weekday=1; _weekday <= 7; _weekday++) {
                         $_month_weekday = $weekday_proto.clone(true);
-                        $_month_weekday.removeClass('datepicker_1__proto');
-                        var $_month_weekday_title = $_month_weekday.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_title');
-                        var $_month_weekday_days = $_month_weekday.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days');
-                        var $_day_proto = $_month_weekday_days.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day.datepicker_1__proto');
+                        $_month_weekday.removeClass('jQueryDatepicker__proto');
+                        var $_month_weekday_title = $_month_weekday.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_title');
+                        var $_month_weekday_days = $_month_weekday.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days');
+                        var $_day_proto = $_month_weekday_days.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day.jQueryDatepicker__proto');
                         var $_day;
 
                         var _day_name = jQueryDatepicker.day_names_short[_weekday];
@@ -119,26 +151,26 @@ var jQueryDatepicker = function (parameters) {
                         for (var i=0; i < _days.days.length; i++) {
                             _day = _days.days[i];
                             $_day = $_day_proto.clone(true);
-                            $_day.removeClass('datepicker_1__proto');
+                            $_day.removeClass('jQueryDatepicker__proto');
 
                             $_day.attr({
                                 day: _day
                             });
 
-                            $_day.addClass('datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+_day);
+                            $_day.addClass('jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+_day);
 
                             if (
-                                (calendar_current_year == selected_year) &&
+                                (calendar_year == selected_year) &&
                                 (_month == selected_month) &&
                                 (_day == selected_day)
                             ) {
-                                $_day.addClass('__current');
+                                $_day.addClass('jQueryDatepicker__current');
                             }
 
                             if (_day == undefined) {
-                                $_day.addClass('__previous_month');
+                                $_day.addClass('jQueryDatepicker__previous_month');
                             } else {
-                                $_day.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day_number').html(_day);
+                                $_day.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day_number').html(_day);
                             }
 
                             $_day.appendTo($_month_weekday_days);
@@ -147,198 +179,350 @@ var jQueryDatepicker = function (parameters) {
                         $_month_weekday.appendTo($_month_weekdays);
                     }
 
-                    $_month.addClass('datepicker_1_calendar_1_months_month-month-'+_month);
+                    $_month.addClass('jQueryDatepicker_calendar_months_month-month-'+_month);
                     $_month.appendTo($months);
                 }
 
-                $label_year.html(calendar_current_year);
+                $label_year.html(calendar_year);
 
-                process_date_other();
+                process_start_date();
             });
 
-            $datepicker.on('select_month.datepicker', function (event, params) {  
+            $datepicker.on('jQueryDatepicker_select_month.jQueryDatepicker', function (event, params) {  
                 params.month = parseInt(params.month);
 
-                calendar_current_month = params.month;
+                calendar_month = params.month;
 
-                $current_month = $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+params.month);
-                $label_month.html(jQueryDatepicker.month_names[calendar_current_month]);
-                $datepicker.find('.datepicker_1_calendar_1_months_month').not('.datepicker_1__proto').not($current_month).hide().removeClass('__current');
-                $current_month.show().addClass('__current');
+                $current_month = $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+params.month);
+                $label_month.html(jQueryDatepicker.month_names[calendar_month]);
+                $datepicker.find('.jQueryDatepicker_calendar_months_month').not('.jQueryDatepicker__proto').not($current_month).hide().removeClass('jQueryDatepicker__current');
+                $current_month.show().addClass('jQueryDatepicker__current');
 
-                process_date_other();
+                process_start_date();
             });
 
-            $datepicker.on('change_month.datepicker', function (event, params) {
+            $datepicker.on('jQueryDatepicker_change_month.jQueryDatepicker', function (event, params) {
                 var new_month;
                 var new_year;
 
                 if (params.rotation == 'next') {
-                    new_month = calendar_current_month + 1;
+                    new_month = calendar_month + 1;
                     if (new_month > 12) {
-                        new_year = calendar_current_year + 1;
+                        new_year = calendar_year + 1;
                         new_month = 1;
                     } else {
-                        new_year = calendar_current_year;
+                        new_year = calendar_year;
                     }
                 } else if (params.rotation = 'previous') {
-                    new_month = calendar_current_month - 1;
+                    new_month = calendar_month - 1;
                     if (new_month < 1) {
-                        new_year = calendar_current_year - 1;
+                        new_year = calendar_year - 1;
                         new_month = 12;
                     } else {
-                        new_year = calendar_current_year;
+                        new_year = calendar_year;
                     }
                 }
 
-                if (calendar_current_year != new_year) {
-                    $datepicker.trigger('select_year.datepicker', {year: new_year});
+                if (calendar_year != new_year) {
+                    $datepicker.trigger('jQueryDatepicker_select_year', {year: new_year});
                 }
 
-                $datepicker.trigger('select_month.datepicker', {month: new_month});
+                $datepicker.trigger('jQueryDatepicker_select_month', {month: new_month});
             });
 
-            var process_date_other = function () {
-                $datepicker.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day')
-                           .removeClass('__current_other')
-                           .removeClass('__current_other_diff');
+            var process_start_date = function () {
+                $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day')
+                           .removeClass('jQueryDatepicker__current_other')
+                           .removeClass('jQueryDatepicker__current_other_diff');
 
                 if (
-                    calendar_current_year == calendar_current_year_other &&
-                    calendar_current_month == calendar_current_month_other
+                    calendar_year == selected_start_year &&
+                    calendar_month == selected_start_month
                 ) {
-                    $datepicker.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+calendar_current_day_other).addClass('__current_other');
+                    $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+selected_start_day)[is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other');
                 }
 
-                if (selected_year == calendar_current_year_other) {
-                    if (selected_month == calendar_current_month_other) {
-                        for (var i=calendar_current_day_other+1; i < calendar_current_day; i++) {
-                            $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+selected_month)
-                                       .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+i)
-                                       .addClass('__current_other_diff');
-                        }
-                    } else if (selected_month > calendar_current_month_other) {
-                        for (var _month=calendar_current_month_other; _month <= selected_month; _month++) {
-                            if (_month != selected_month) {
-                                if (_month == calendar_current_month_other) {
-                                    for (var i=calendar_current_day_other+1; i < 32; i++) {
-                                        $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+_month)
-                                                   .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+i)
-                                                   .addClass('__current_other_diff');
+                if ((selected_year == calendar_year) || (selected_start_year == calendar_year)) {
+                    if (selected_year == selected_start_year) {
+                        if (selected_month == selected_start_month) {
+                            for (var i=selected_start_day+1; i < calendar_day; i++) {
+                                $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+selected_month)
+                                           .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+i)
+                                           [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                            }
+                        } else if (selected_month > selected_start_month) {
+                            for (var _month=selected_start_month; _month <= selected_month; _month++) {
+                                if (_month != selected_month) {
+                                    if (_month == selected_start_month) {
+                                        for (var i=selected_start_day+1; i < 32; i++) {
+                                            $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+_month)
+                                                       .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+i)
+                                                       [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                                        }
+                                    } else {
+                                        for (var i=1; i < 32; i++) {
+                                            $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+_month)
+                                                       .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+i)
+                                                       [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                                        }
                                     }
                                 } else {
-                                    for (var i=1; i < 32; i++) {
-                                        $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+_month)
-                                                   .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+i)
-                                                   .addClass('__current_other_diff');
+                                    for (var i=1; i < selected_day; i++) {
+                                        $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+_month)
+                                                   .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+i)
+                                                   [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
                                     }
                                 }
-                            } else {
-                                for (var i=1; i < selected_day; i++) {
-                                    $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+_month)
-                                               .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+i)
-                                               .addClass('__current_other_diff');
-                                }
                             }
                         }
-                    }
-                } else if (selected_year > calendar_current_year_other) {
-                    if (selected_year == calendar_current_year) {
-                        for (var m=1; m < selected_month; m++) {
-                            $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+m)
-                                       .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day')
-                                       .addClass('__current_other_diff');
-                        }
+                    } else if (selected_year > selected_start_year) {
+                        if (selected_year == calendar_year) {
+                            for (var m=1; m < selected_month; m++) {
+                                $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+m)
+                                           .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day')
+                                           [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                            }
 
-                        for (var d=1; d < selected_day; d++) {
-                            $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+selected_month)
-                                       .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+d)
-                                       .addClass('__current_other_diff');
-                        }
-                    } else if (calendar_current_year == calendar_current_year_other) {
-                        if (calendar_current_month == calendar_current_month_other) {
-                            for (var d=calendar_current_day_other+1; d < 32; d++) {
-                                $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+calendar_current_month)
-                                           .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+d)
-                                           .addClass('__current_other_diff');
+                            for (var d=1; d < selected_day; d++) {
+                                $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+selected_month)
+                                           .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+d)
+                                           [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
                             }
-                        } else if (calendar_current_month > calendar_current_month_other) {
-                            $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+calendar_current_month)
-                                       .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day')
-                                       .addClass('__current_other_diff');
-                        }
-                    } else if (selected_year > calendar_current_year) {
-                        for (var m=1; m <= 12; m++) {
-                            $datepicker.find('.datepicker_1_calendar_1_months_month-month-'+m)
-                                       .find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day')
-                                       .addClass('__current_other_diff');
+                        } else if (calendar_year == selected_start_year) {
+                            if (calendar_month == selected_start_month) {
+                                for (var d=selected_start_day+1; d < 32; d++) {
+                                    $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+calendar_month)
+                                               .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+d)
+                                               [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                                }
+                            } else if (calendar_month > selected_start_month) {
+                                $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+calendar_month)
+                                           .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day')
+                                           [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                            }
+                        } else if (selected_year > calendar_year) {
+                            for (var m=1; m <= 12; m++) {
+                                $datepicker.find('.jQueryDatepicker_calendar_months_month-month-'+m)
+                                           .find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day')
+                                           [is_start_date_selected ? 'addClass': 'removeClass']('jQueryDatepicker__current_other_diff');
+                            }
                         }
                     }
                 }
             };
 
-            $datepicker.on('select_day.datepicker', function (event, params) {
-                calendar_current_day = parseInt(params.day);
-                var _date = new Date(calendar_current_year, calendar_current_month-1, calendar_current_day); // ??
-                calendar_current_weekday = _date.getDay() == 0 ? 7: _date.getDay();
-                $current_day = $current_month.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day-day-'+calendar_current_day);
-                $datepicker.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day').not($current_day).removeClass('__current');
-                $current_day.addClass('__current');
+            data.setMode = function (mode) {
+                data.mode = (mode == 'date') ? jQueryDatepicker.MODE_DATE: jQueryDatepicker.MODE_START_DATE;
+            };
 
-                selected_year = calendar_current_year;
-                selected_month = calendar_current_month;
-                selected_day = calendar_current_day;
-                selected_dayofweek = calendar_current_weekday;
+            data.toggleMode = function (mode) {
+                if (data.mode == jQueryDatepicker.MODE_DATE) {
+                    data.mode = jQueryDatepicker.MODE_START_DATE;
+                } else {
+                    data.mode = jQueryDatepicker.MODE_DATE;
+                }
+            };
 
-                $datepicker.trigger('date_selected.datepicker', {
+            data.getMode = function () {
+                return (data.mode == jQueryDatepicker.MODE_DATE) ? 'date': 'start_date';
+            };
+
+            data.setDate = function (params) {
+                calendar_year = parseInt(params.year);
+                calendar_month = parseInt(params.month);
+                
+                data.selectDay({
+                    day: params.day
+                });
+            };
+
+            data.selectDay = function (params) {
+                calendar_day = parseInt(params.day);
+                data.date = new Date(calendar_year, calendar_month-1, calendar_day);
+                calendar_weekday = data.date.getDay() == 0 ? 7: data.date.getDay();
+
+                selected_year = calendar_year;
+                selected_month = calendar_month;
+                selected_day = calendar_day;
+                selected_dayofweek = calendar_weekday;
+
+                $current_day = $current_month.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+calendar_day);
+                $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day').not($current_day).removeClass('jQueryDatepicker__current');
+                $current_day.addClass('jQueryDatepicker__current');
+                
+                $datepicker.trigger('jQueryDatepicker_date_selected', {
+                    mode: 'date',
                     details: {
                         year: selected_year,
                         month: selected_month,
                         day: selected_day,
                         dayofweek: selected_dayofweek
                     },
-                    date: _date,
-                    from_user: params['from_user']
+                    date: data.date,
+                    start_date: data.isStartDateSelected() && {
+                        details: {
+                            year: selected_start_year,
+                            month: selected_start_month,
+                            day: selected_start_day,
+                            dayofweek: selected_start_weekday
+                        },
+                        date: data.start_date,
+                    },
+                    from_user: params['from_user'] ? true: false
                 });
-                
-                process_date_other();
-            });
 
-            $datepicker.on('set_date_other.datepicker', function (event, params) {
-                calendar_current_year_other = parseInt(params.year);
-                calendar_current_month_other = parseInt(params.month);
-                calendar_current_day_other = parseInt(params.day);
+                is_date_selected = true;
 
-                $datepicker.trigger('select_date_other.datepicker');
-            });
+                process_start_date();
+            };
 
-            $datepicker.on('select_date_other.datepicker', function (event, params) {
-                process_date_other();
-            });
+            data.clearDate = function () {
+                is_date_selected = false;
 
-            $datepicker.find('.datepicker_1_rotation_button').on('click.datepicker', function (event) {
+                selected_date = false;
+                selected_year = false;
+                selected_month = false;
+                selected_day = false;
+                selected_dayofweek = false;
+
+                $current_day = $current_month.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+calendar_day);
+                $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day').not($current_day).removeClass('jQueryDatepicker__current');
+                $current_day.removeClass('jQueryDatepicker__current');
+
+                process_start_date();
+            };
+
+            data.isDateSelected = function () {
+                 return is_date_selected;
+            };
+
+            data.clearStartDate = function () {
+                is_start_date_selected = false;
+                process_start_date();
+            };
+
+            data.isStartDateSelected = function () {
+                 return is_start_date_selected;
+            };
+
+            data.getDate = function () {
+                return data.isDateSelected() && {
+                    details: {
+                        year: selected_year,
+                        month: selected_month,
+                        day: selected_day,
+                        dayofweek: selected_dayofweek
+                    },
+                    date: data.date,
+                    start_date: data.isStartDateSelected() && {
+                        details: {
+                            year: selected_start_year,
+                            month: selected_start_month,
+                            day: selected_start_day,
+                            dayofweek: selected_start_weekday
+                        },
+                        date: data.start_date,
+                    }
+                };
+            };
+
+            data.getStartDate = function () {
+                return data.isStartDateSelected() && {
+                    details: {
+                        year: selected_start_year,
+                        month: selected_start_month,
+                        day: selected_start_day,
+                        dayofweek: selected_start_weekday
+                    },
+                    date: data.start_date,
+                };
+            };
+
+            data.setStartDate = function (params) {
+                selected_start_year = parseInt(params.year);
+                selected_start_month = parseInt(params.month);
+                selected_start_day = parseInt(params.day);
+
+                data.start_date = new Date(selected_start_year, selected_start_month-1, selected_start_day);
+
+                is_start_date_selected = true;
+
+                $datepicker.trigger('jQueryDatepicker_date_selected', {
+                    mode: 'start_date',
+                    details: {
+                        year: selected_year,
+                        month: selected_month,
+                        day: selected_day,
+                        dayofweek: selected_dayofweek
+                    },
+                    date: data.date,
+                    start_date: {
+                        details: {
+                            year: selected_start_year,
+                            month: selected_start_month,
+                            day: selected_start_day,
+                            dayofweek: selected_start_weekday
+                        },
+                        date: data.start_date,
+                    },
+                    from_user: params['from_user'] ? true: false
+                });
+
+                process_start_date();
+            };
+
+            data.setDisabled = function (is_disabled) {
+                if (data.is_disabled = is_disabled) {
+                    $disabledLayer.show();
+                } else {
+                    $disabledLayer.hide();
+                }
+            };
+
+            $datepicker.find('.jQueryDatepicker_rotationButton').on('click.jQueryDatepicker', function (event) {
                 var $button = $(this);
-                $datepicker.trigger('change_month.datepicker', {rotation: $button.attr('rotation')});
+                $datepicker.trigger('jQueryDatepicker_change_month', {rotation: $button.attr('rotation')});
             });
 
-            $datepicker.find('.datepicker_1_calendar_1_months_month_weekdays_weekday_days_day').on('click.datepicker', function (event) {
+            $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day').on('click.jQueryDatepicker', function (event) {
                 var $day = $(this);
-                if ($day.hasClass('__current_other') || $day.hasClass('__previous_month')) {
+
+                if ($day.hasClass('jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-undefined')) {
                     return;
                 }
 
-                $current_day = $day;
+                var clicked_day = parseInt($day.attr('day'));
 
-                $datepicker.trigger('select_day.datepicker', {
-                    day: parseInt($current_day.attr('day')),
-                    from_user: true
-                });
+                if (data.mode == jQueryDatepicker.MODE_DATE) {
+                    if ($day.hasClass('jQueryDatepicker__current_other') || $day.hasClass('jQueryDatepicker__previous_month')) {
+                        return;
+                    }
+
+                    $current_day = $day;
+
+                    data.selectDay({
+                        day: clicked_day,
+                        from_user: true
+                    });
+                } else if (data.mode == jQueryDatepicker.MODE_START_DATE) {
+                    $current_start_day = $day;
+
+                    data.setStartDate({
+                        year: calendar_year,
+                        month: calendar_month,
+                        day: clicked_day,
+                        from_user: true
+                    });
+                }
             });
 
-            $datepicker.trigger('initialize.datepicker');
+            data.initialize();
         });
     };
 };
+
+jQueryDatepicker.MODE_DATE = 1;
+jQueryDatepicker.MODE_START_DATE = 2;
 
 jQueryDatepicker.day_names_short = {
     1: 'Mon',
@@ -375,64 +559,72 @@ jQueryDatepicker.month_names = {
     12: 'December'
 };
 
-// ----------------------------------------
+jQueryDatepicker.event = function (name) {
+    return 'jQueryDatepicker_'+name;
+};
+
+jQueryDatepicker.data = function ($datepicker) {
+    return $datepicker.data('jQueryDatepicker');
+};
 
 (function($){
-    var html_proto = (function () {/*
-        <div class="datepicker_1">
-            <div class="datepicker_1_content_1">
-                <div class="datepicker_1_table">
-                    <div class="datepicker_1_table_td">
-                        <span class="datepicker_1_label_month">
-                            
-                        </span>
-                        <span class="datepicker_1_label_year">
-                            
-                        </span>
-                    </div>
-                </div>
-
-                <div class="datepicker_1_rotation_button datepicker_1_content_1_sidebutton datepicker_1_content_1_sidebutton__left datepicker_1_content_1_sidebutton__left" rotation="previous">
-                    <div class="datepicker_1_table">
-                        <div class="datepicker_1_table_td">
-                            <div class="datepicker_1_content_1_sidebutton_content"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="datepicker_1_rotation_button datepicker_1_content_1_sidebutton datepicker_1_content_1_sidebutton__right datepicker_1_content_1_sidebutton__right" rotation="next">
-                    <div class="datepicker_1_table">
-                        <div class="datepicker_1_table_td">
-                            <div class="datepicker_1_content_1_sidebutton_content"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="datepicker_1_content_2">
-                <div class="datepicker_1_calendar_1">
-                    <div class="datepicker_1_calendar_1_months">
-                        <div class="datepicker_1_calendar_1_months_month datepicker_1__proto">
-                            <div class="datepicker_1_calendar_1_months_month_weekdays">
-                                <div class="datepicker_1_calendar_1_months_month_weekdays_weekday datepicker_1__proto">
-                                    <div class="datepicker_1_calendar_1_months_month_weekdays_weekday_title">
-                                    </div>
-                                    <div class="datepicker_1_calendar_1_months_month_weekdays_weekday_days">
-                                        <div class="datepicker_1_calendar_1_months_month_weekdays_weekday_days_day datepicker_1__proto">
-                                            <div class="datepicker_1_table">
-                                                <div class="datepicker_1_table_td">
-                                                    <div class="datepicker_1_calendar_1_months_month_weekdays_weekday_days_day_number"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+    var html_proto = '' +
+    '<div class="jQueryDatepicker">' +
+        '<div class="jQueryDatepicker_header">' +
+            '<div class="jQueryDatepicker_header_bG">' +
+            '</div>' +
+            '<div class="jQueryDatepicker_table">' +
+                '<div class="jQueryDatepicker_table_td">' +
+                    '<span class="jQueryDatepicker_label_month"></span>&nbsp;' +
+                    '<span class="jQueryDatepicker_label_year"></span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="jQueryDatepicker_rotationButton jQueryDatepicker_rotationButton__left jQueryDatepicker_header_sidebutton jQueryDatepicker_header_sidebutton__left jQueryDatepicker_header_sidebutton__left" rotation="previous">' +
+                '<div class="jQueryDatepicker_table">' +
+                    '<div class="jQueryDatepicker_table_td">' +
+                        '<div class="jQueryDatepicker_header_sidebutton_content">' +
+                            '<img class="jQueryDatepicker_rotationButton_iconImg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAuklEQVRIS+3SOw6CQBSF4Z9Ol6OtFQVqY1yIbkfWgZZsBCtrl6CNmpsMCVp4H2E6qEgmOR/nDAWZnyJzPhOgLhydaA68gYcmRAAJPydgryFeoA+vgDuwAm7/WniA3/ASuI41UShccEuDcLgVuAA74AksgE6bZXhuaSAXKsgMqIHD2IDkhRFLg/6D1+n/dzXxAAJtgCbNdQKO2lxeYIjI+1K79AggwVvgBbQ5GmiZX+fRBmZkAtSpsk/0AQZDIBnr6Sz2AAAAAElFTkSuQmCC" alt="Previous Month" />' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="jQueryDatepicker_rotationButton jQueryDatepicker_rotationButton__right jQueryDatepicker_header_sidebutton jQueryDatepicker_header_sidebutton__right jQueryDatepicker_header_sidebutton__right" rotation="next">' +
+                '<div class="jQueryDatepicker_table">' +
+                    '<div class="jQueryDatepicker_table_td">' +
+                        '<div class="jQueryDatepicker_header_sidebutton_content">' +
+                        '<img class="jQueryDatepicker_rotationButton_iconImg" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4IiB3aWR0aD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE3LjE3IDMyLjkybDkuMTctOS4xNy05LjE3LTkuMTcgMi44My0yLjgzIDEyIDEyLTEyIDEyeiIvPjxwYXRoIGQ9Ik0wLS4yNWg0OHY0OGgtNDh6IiBmaWxsPSJub25lIi8+PC9zdmc+" alt="Next Month" /></div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+        '<div class="jQueryDatepicker_body">' +
+            '<div class="jQueryDatepicker_calendar">' +
+                '<div class="jQueryDatepicker_calendar_months">' +
+                    '<div class="jQueryDatepicker_calendar_months_month jQueryDatepicker__proto">' +
+                        '<div class="jQueryDatepicker_calendar_months_month_weekdays">' +
+                            '<div class="jQueryDatepicker_calendar_months_month_weekdays_weekday jQueryDatepicker__proto">' +
+                                '<div class="jQueryDatepicker_calendar_months_month_weekdays_weekday_title">' +
+                                '</div>' +
+                                '<div class="jQueryDatepicker_calendar_months_month_weekdays_weekday_days">' +
+                                    '<div class="jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day jQueryDatepicker__proto">' +
+                                        '<div class="jQueryDatepicker_table">' +
+                                            '<div class="jQueryDatepicker_table_td">' +
+                                                '<div class="jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day_number"></div>' +
+                                            '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+        '<div class="jQueryDatepicker_disabledLayer">' +
+        '</div>' +
+    '</div>' +
+    '';
+    
     var $html_proto = $(html_proto);
     
     var methods = {
@@ -446,23 +638,21 @@ jQueryDatepicker.month_names = {
 
             t_init.parameters = parameters;
 
-            if (!t_init.parameters.hasOwnProperty('next_button')) {
-                t_init.parameters.next_button = '&gt;';
-            }
-
-            if (!t_init.parameters.hasOwnProperty('prev_button')) {
-                t_init.parameters.prev_button = '&lt;';
-            }
-
             $elements.each(function () {
                 var $element = $(this);
                 
-                $element.html(html_proto).addClass('datepicker_1');
+                $element.html(html_proto).addClass('jQueryDatepicker');
 
-                $element.find('.datepicker_1_content_1_sidebutton__right .datepicker_1_content_1_sidebutton_content')
-                .html(t_init.parameters.next_button);
-                $element.find('.datepicker_1_content_1_sidebutton__left .datepicker_1_content_1_sidebutton_content')
-                .html(t_init.parameters.prev_button);
+                if (t_init.parameters.hasOwnProperty('next_button')) {
+                    $element
+                    .find('.jQueryDatepicker_header_sidebutton__right .jQueryDatepicker_header_sidebutton_content')
+                    .html(t_init.parameters.next_button);
+                }
+                if (t_init.parameters.hasOwnProperty('prev_button')) {
+                    $element
+                    .find('.jQueryDatepicker_header_sidebutton__left .jQueryDatepicker_header_sidebutton_content')
+                    .html(t_init.parameters.prev_button);
+                }
 
                 var datepicker = new jQueryDatepicker({
                     $element: $element
@@ -481,10 +671,5 @@ jQueryDatepicker.month_names = {
         } else {
             $.error('Method '+method+' does not exist on jQuery.datepicker');
         }
-    };
-
-    $.fn.setStartDate = function (parameters) {
-        var $element = $(this);
-        $element.trigger('set_date_other.datepicker', parameters);
     };
 })(jQuery);

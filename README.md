@@ -1,44 +1,111 @@
 # jquery.datepicker
 a futuristic datepicker for web
 
+[![GitHub release](https://img.shields.io/github/release/rohanrhu/jquery.datepicker.svg?style=flat-square)]()
+[![GitHub release](https://img.shields.io/badge/build-2017.01.16.03.23.00-green.svg?style=flat-square)]()
+[![GitHub release](https://img.shields.io/github/downloads/rohanrhu/jquery.datepicker/total.svg?style=flat-square)]()
+
 <img src="http://oguzhaneroglu.com/static/images/jquery.datepicker.png" />
 
-###Init
+Visit <a href="http://oguzhaneroglu.com/projects/jquery.datepicker/" target="_blank">project page</a> for example.
+
+### Init
+
+#### Javascript
 
 ```javascript
 $(document).ready(function () {
     var $selected = $('.selected');
+    var $start = $('.start');
+    var $toggleMode = $('.toggleMode');
 
-    $some_datepicker = $('.some_datepicker');
-    
-    $some_datepicker.datepicker({
-        next_button: '&gt;',
-        prev_button: '&lt;'
+    var $some_datepicker = $('.some_datepicker');
+    $some_datepicker.datepicker();
+    var datepicker = jQueryDatepicker.data($some_datepicker);
+
+    var date = new Date();
+
+    $some_datepicker.on(jQueryDatepicker.event('date_selected'), function (event, date) {
+        if (date.mode == 'date') {
+            console.log('date selected:', date);
+        } else if (date.mode == 'start_date') {
+            console.log('start date selected:', date);
+        }
+
+        if (datepicker.isStartDateSelected()) {
+            $start.show().html('<b>start date:</b> '+date.start_date.date.toString());
+        }
+        
+        $selected.show().html('<b>date:</b> '+date.date.toString());
     });
 
-    $some_datepicker.setStartDate({
-        year: 2015,
+    // If you need a date range
+    datepicker.setStartDate({
+        year: 2017,
+        month: date.getMonth()+1,
+        day: 4
+    });
+
+    datepicker.setDate({
+        year: 2017,
         // jquery.datepicker accepts first month as 1
         // (built-in Date() class accepts first month as 0)
-        month: 1,
-        day: 3
+        month: date.getMonth()+1,
+        day: 21
     });
 
-    $some_datepicker.on('date_selected.datepicker', function (event, date) {
-        $selected.show().html('Selected date is: '+date.date.toString());
+    $toggleMode.on('click', function (event) {
+        datepicker.toggleMode();
+
+        if (datepicker.getMode() == 'date') {
+            $toggleMode.html('toggle start date selection mode');
+        } else {
+            $toggleMode.html('toggle date selection mode');
+        }
     });
 });
 ```
 
-###HTML
+#### HTML
 
 ```html
 <div style="width: 300px; font-family: 'Arial'; margin: auto;">
     <div class="some_datepicker">
     </div>
 </div>
-<div class="selected" style="margin: auto;margin-top: 15px;">
+
+<div class="toggleMode btn" style="margin: auto; margin-top: 15px;">
+    toggle start date selection mode
 </div>
+
+<div class="start" style="margin: auto; margin-top: 15px;">
+</div>
+
+<div class="selected" style="margin: auto;margin-top: 10px;">
+</div>
+```
+
+#### CSS
+
+```css
+.btn {
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid #c1c1c1;
+    border-bottom: 2px solid #c1c1c1;
+    padding: 5px; border-radius: 2px;
+    transition: all 250ms;
+    font-size: 14px;
+}
+
+.selected,
+.start {
+    font-size: 14px;
+}
+
+.btn:hover {
+    background: #f1f1f1;
+}
 ```
 
 ###I18N
