@@ -2,12 +2,12 @@
 a futuristic datepicker for web
 
 [![GitHub release](https://img.shields.io/github/release/rohanrhu/jquery.datepicker.svg?style=flat-square)]()
-[![GitHub release](https://img.shields.io/badge/build-2017.01.16.03.23.00-green.svg?style=flat-square)]()
-[![GitHub release](https://img.shields.io/github/downloads/rohanrhu/jquery.datepicker/total.svg?style=flat-square)]()
+[![GitHub nightly build](https://img.shields.io/badge/build-2017.01.16.03.23.00-green.svg?style=flat-square)]()
+[![GitHub downloads](https://img.shields.io/github/downloads/rohanrhu/jquery.datepicker/total.svg?style=flat-square)]()
 
-<img src="http://oguzhaneroglu.com/static/images/jquery.datepicker.png" />
+![jquery.datepicker](http://oguzhaneroglu.com/static/images/jquery.datepicker.png "jquery.datepicker")
 
-Visit <a href="http://oguzhaneroglu.com/projects/jquery.datepicker/" target="_blank">project page</a> for example.
+Visit [project page](http://oguzhaneroglu.com/projects/jquery.datepicker/) for example and [api reference](https://github.com/rohanrhu/jquery.datepicker/wiki/API-Reference) for documentation.
 
 ### Init
 
