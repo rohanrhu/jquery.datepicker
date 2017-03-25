@@ -1,9 +1,9 @@
 # jquery.datepicker
 a futuristic datepicker for web
 
-[![GitHub release](https://img.shields.io/github/release/rohanrhu/jquery.datepicker.svg?style=flat-square)]()
-[![GitHub nightly build](https://img.shields.io/badge/build-2017.01.16.03.23.00-green.svg?style=flat-square)]()
-[![GitHub downloads](https://img.shields.io/github/downloads/rohanrhu/jquery.datepicker/total.svg?style=flat-square)]()
+[![GitHub release](https://img.shields.io/github/release/rohanrhu/jquery.datepicker.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker/releases)
+[![GitHub nightly build](https://img.shields.io/badge/build-2017.03.26.00.00.00-green.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker)
+[![GitHub downloads](https://img.shields.io/github/downloads/rohanrhu/jquery.datepicker/total.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker/releases)
 
 ![jquery.datepicker](http://oguzhaneroglu.com/static/images/jquery.datepicker.png "jquery.datepicker")
 
@@ -108,7 +108,7 @@ $(document).ready(function () {
 }
 ```
 
-###I18N
+### I18N
 
 ```javascript
 jQueryDatepicker.day_names_short = {
@@ -147,5 +147,5 @@ jQueryDatepicker.month_names = {
 };
 ```
 
-##License
+## License
 MIT

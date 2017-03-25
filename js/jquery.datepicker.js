@@ -7,8 +7,8 @@
  * Copyright (C) 2014, Oğuzhan Eroğlu <rohanrhu2@gmail.com>
  * Licensed under MIT
  * 
- * version: 1.2.0
- * build: 2017.01.16.03.23.00
+ * version: 1.2.1
+ * build: 2017.03.26.00.00.00
  */
 
 var jQueryDatepicker = function (parameters) {
@@ -311,31 +311,6 @@ var jQueryDatepicker = function (parameters) {
                 }
             };
 
-            data.setMode = function (mode) {
-                data.mode = (mode == 'date') ? jQueryDatepicker.MODE_DATE: jQueryDatepicker.MODE_START_DATE;
-            };
-
-            data.toggleMode = function (mode) {
-                if (data.mode == jQueryDatepicker.MODE_DATE) {
-                    data.mode = jQueryDatepicker.MODE_START_DATE;
-                } else {
-                    data.mode = jQueryDatepicker.MODE_DATE;
-                }
-            };
-
-            data.getMode = function () {
-                return (data.mode == jQueryDatepicker.MODE_DATE) ? 'date': 'start_date';
-            };
-
-            data.setDate = function (params) {
-                calendar_year = parseInt(params.year);
-                calendar_month = parseInt(params.month);
-                
-                data.selectDay({
-                    day: params.day
-                });
-            };
-
             data.selectDay = function (params) {
                 calendar_day = parseInt(params.day);
                 data.date = new Date(calendar_year, calendar_month-1, calendar_day);
@@ -374,6 +349,31 @@ var jQueryDatepicker = function (parameters) {
                 is_date_selected = true;
 
                 process_start_date();
+            };
+
+            data.setMode = function (mode) {
+                data.mode = (mode == 'date') ? jQueryDatepicker.MODE_DATE: jQueryDatepicker.MODE_START_DATE;
+            };
+
+            data.toggleMode = function (mode) {
+                if (data.mode == jQueryDatepicker.MODE_DATE) {
+                    data.mode = jQueryDatepicker.MODE_START_DATE;
+                } else {
+                    data.mode = jQueryDatepicker.MODE_DATE;
+                }
+            };
+
+            data.getMode = function () {
+                return (data.mode == jQueryDatepicker.MODE_DATE) ? 'date': 'start_date';
+            };
+
+            data.setDate = function (params) {
+                calendar_year = parseInt(params.year);
+                calendar_month = parseInt(params.month);
+                
+                data.selectDay({
+                    day: params.day
+                });
             };
 
             data.clearDate = function () {
