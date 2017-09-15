@@ -2,8 +2,7 @@
 a futuristic datepicker for web
 
 [![GitHub release](https://img.shields.io/github/release/rohanrhu/jquery.datepicker.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker/releases)
-[![GitHub nightly build](https://img.shields.io/badge/build-2017.03.26.00.00.00-green.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker)
-[![GitHub downloads](https://img.shields.io/github/downloads/rohanrhu/jquery.datepicker/total.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker/releases)
+[![GitHub nightly build](https://img.shields.io/badge/build-2017.09.15.00.00.00-green.svg?style=flat-square)](https://github.com/rohanrhu/jquery.datepicker)
 
 ![jquery.datepicker](http://oguzhaneroglu.com/static/images/jquery.datepicker.png "jquery.datepicker")
 

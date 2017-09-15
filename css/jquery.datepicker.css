@@ -7,8 +7,8 @@
  * Copyright (C) 2014, Oğuzhan Eroğlu <rohanrhu2@gmail.com>
  * Licensed under MIT
  * 
- * version: 1.2.1
- * build: 2017.03.26.00.00.00
+ * version: 1.2.2
+ * build: 2017.09.15.00.00.00
  */
 
 .jQueryDatepicker_table {
@@ -78,6 +78,8 @@
 
 .jQueryDatepicker_header_sidebutton .jQueryDatepicker_rotationButton_iconImg {
     height: 15px;
+    display: block;
+    margin: auto;
 }
 
 .jQueryDatepicker_header_sidebutton:hover {
