@@ -7,8 +7,8 @@
  * Copyright (C) 2014, Oğuzhan Eroğlu <rohanrhu2@gmail.com>
  * Licensed under MIT
  * 
- * version: 1.2.2
- * build: 2017.09.15.00.00.00
+ * version: 1.2.3
+ * build: 2017.10.16.00.00.00
  */
 
 var jQueryDatepicker = function (parameters) {
@@ -335,6 +335,27 @@ var jQueryDatepicker = function (parameters) {
                 $current_day = $_month.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day-day-'+calendar_day);
                 $datepicker.find('.jQueryDatepicker_calendar_months_month_weekdays_weekday_days_day').not($current_day).removeClass('jQueryDatepicker__current');
                 $current_day.addClass('jQueryDatepicker__current');
+
+                $datepicker.trigger('jQueryDatepicker_date_selected', {
+                    mode: 'date',
+                    details: {
+                        year: selected_year,
+                        month: selected_month,
+                        day: selected_day,
+                        dayofweek: selected_dayofweek
+                    },
+                    date: data.date,
+                    start_date: data.isStartDateSelected() && {
+                        details: {
+                            year: selected_start_year,
+                            month: selected_start_month,
+                            day: selected_start_day,
+                            dayofweek: selected_start_weekday
+                        },
+                        date: data.start_date,
+                    },
+                    from_user: params['from_user'] ? true: false
+                });
                 
                 is_date_selected = true;
 
@@ -443,6 +464,27 @@ var jQueryDatepicker = function (parameters) {
                 data.start_date = new Date(selected_start_year, selected_start_month-1, selected_start_day);
 
                 is_start_date_selected = true;
+
+                $datepicker.trigger('jQueryDatepicker_date_selected', {
+                     mode: 'start_date',       
+                     details: {        
+                         year: selected_year,      
+                         month: selected_month,        
+                         day: selected_day,        
+                         dayofweek: selected_dayofweek     
+                     },        
+                     date: data.date,      
+                     start_date: {     
+                         details: {        
+                             year: selected_start_year,        
+                             month: selected_start_month,      
+                             day: selected_start_day,      
+                             dayofweek: selected_start_weekday     
+                         },        
+                         date: data.start_date,        
+                     },        
+                     from_user: params['from_user'] ? true: false      
+                 });
 
                 process_start_date();
             };
